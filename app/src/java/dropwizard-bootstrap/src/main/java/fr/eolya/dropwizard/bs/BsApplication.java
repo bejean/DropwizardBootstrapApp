@@ -1,4 +1,6 @@
-package fr.eolya.dropwizard;
+package fr.eolya.dropwizard.bs;
+
+import fr.eolya.dropwizard.bs.services.hello.HelloResource;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -24,7 +26,7 @@ public class BsApplication extends Application<BsConfiguration> {
     @Override
     public void run(BsConfiguration configuration,
                     Environment environment) {
-        final BsResource resource = new BsResource(
+        final HelloResource resource = new HelloResource(
                 configuration.getTemplate(),
                 configuration.getDefaultName()
             );

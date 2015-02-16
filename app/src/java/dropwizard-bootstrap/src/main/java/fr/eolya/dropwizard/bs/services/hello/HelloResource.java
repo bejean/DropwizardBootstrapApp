@@ -1,4 +1,4 @@
-package fr.eolya.dropwizard;
+package fr.eolya.dropwizard.bs.services.hello;
 
 import com.google.common.base.Optional;
 import com.codahale.metrics.annotation.Timed;
@@ -12,12 +12,12 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Path("/bs")
 @Produces(MediaType.APPLICATION_JSON)
-public class BsResource {
+public class HelloResource {
     private final String template;
     private final String defaultName;
     private final AtomicLong counter;
 
-    public BsResource(String template, String defaultName) {
+    public HelloResource(String template, String defaultName) {
         this.template = template;
         this.defaultName = defaultName;
         this.counter = new AtomicLong();
@@ -25,8 +25,8 @@ public class BsResource {
 
     @GET
     @Timed
-    public BsSaying sayHello(@QueryParam("name") Optional<String> name) {
+    public HelloSaying sayHello(@QueryParam("name") Optional<String> name) {
         final String value = String.format(template, name.or(defaultName));
-        return new BsSaying(counter.incrementAndGet(), value);
+        return new HelloSaying(counter.incrementAndGet(), value);
     }
 }
