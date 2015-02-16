@@ -1,6 +1,5 @@
 package fr.eolya.dropwizard.bs.services.hello;
 
-import com.fasterxml.jackson.dataformat.yaml.snakeyaml.Yaml;
 import com.codahale.metrics.annotation.Timed;
 
 import javax.ws.rs.GET;
@@ -9,56 +8,46 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Map;
-
 @Path("/hello")
 @Produces(MediaType.APPLICATION_JSON)
 public class HelloService {
-    private final String configurationExtraPath;
-    private Map<String,String> conf;
-    private String template;
-    private String defaultName;
+	private final String configurationExtraPath;
+	private HelloSettings settings;
 
 	public HelloService(String configurationExtraPath) {
-    	this.configurationExtraPath = configurationExtraPath;
-    	loadConfig();
-    }
+		this.configurationExtraPath = configurationExtraPath;
+		loadConfig(false);
+	}
 
-    @GET
-    @Timed
-    public HelloSaying sayHello() {
-        return new HelloSaying("ok", this.template + "-" + this.defaultName);
-    }
-    
-    @GET
-    @Timed
-    @Path("/{id}")
-    public HelloSaying sayHelloId(@PathParam("id") String id) {
-        return new HelloSaying("ok", this.template + "-" + this.defaultName + '-' + id);
-    }
-    
-    @GET
-    @Timed
-    @Path("/reload")
-    public HelloSaying sayHelloReload() {
-    	loadConfig();
-        return new HelloSaying("ok", "reload-" + this.template + "-" + this.defaultName);
-    }
-    
-    @SuppressWarnings("unchecked")
-	private void loadConfig() {
-    	Yaml yaml = new Yaml();;
-    	try {
-			conf = (Map<String,String>) yaml.load(new FileInputStream(this.configurationExtraPath));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	@GET
+	@Timed
+	public HelloSaying sayHello() {
+		HelloSettings settings = loadConfig(true);
+		return new HelloSaying("ok", settings.getTemplate() + "-" + settings.getDefaultName());
+	}
+
+	@GET
+	@Timed
+	@Path("/{id}")
+	public HelloSaying sayHelloId(@PathParam("id") String id) {
+		HelloSettings settings = loadConfig(true);
+		return new HelloSaying("ok", settings.getTemplate() + "-" + settings.getDefaultName() + '-' + id);
+	}
+
+	@GET
+	@Timed
+	@Path("/reload")
+	public HelloSaying sayHelloReload() {
+		loadConfig(false);
+		return new HelloSaying("ok", "reload-" + settings.getTemplate() + "-" + settings.getDefaultName());
+	}
+
+	private synchronized HelloSettings loadConfig(boolean clone) {
+		if (clone) {
+			return this.settings.clone();
+		} else {
+			this.settings = HelloSettings.load(configurationExtraPath);
+			return this.settings;
 		}
-    	
-        this.template = (String) conf.get("template");
-        this.defaultName = (String) conf.get("defaultName");
-    }
-    
+	}
 }

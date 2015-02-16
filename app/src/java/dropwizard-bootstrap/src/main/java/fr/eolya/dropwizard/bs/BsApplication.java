@@ -2,9 +2,6 @@ package fr.eolya.dropwizard.bs;
 
 import fr.eolya.dropwizard.bs.services.hello.HelloService;
 import io.dropwizard.Application;
-import io.dropwizard.Configuration;
-import io.dropwizard.configuration.ConfigurationFactory;
-import io.dropwizard.configuration.ConfigurationFactoryFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
