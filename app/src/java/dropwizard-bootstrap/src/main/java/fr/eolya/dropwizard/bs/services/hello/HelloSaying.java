@@ -1,30 +1,28 @@
 package fr.eolya.dropwizard.bs.services.hello;
 
-import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class HelloSaying {
-    private long id;
 
-    @Length(max = 3)
-    private String content;
+    private String status;
+    private String message;
 
     public HelloSaying() {
         // Jackson deserialization
     }
 
-    public HelloSaying(long id, String content) {
-        this.id = id;
-        this.content = content;
+    public HelloSaying(String status, String message) {
+        this.status = status;
+        this.message = message;
     }
 
     @JsonProperty
-    public long getId() {
-        return id;
+    public String getStatus() {
+        return status;
     }
 
     @JsonProperty
-    public String getContent() {
-        return content;
+    public String getMessage() {
+        return message;
     }
 }

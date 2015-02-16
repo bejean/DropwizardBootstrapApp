@@ -6,28 +6,15 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 public class BsConfiguration extends Configuration {
     @NotEmpty
-    private String template;
-
-    @NotEmpty
-    private String defaultName = "Stranger";
+    private String configExtra;
 
     @JsonProperty
-    public String getTemplate() {
-        return template;
+    public String getConfigExtra() {
+        return configExtra;
     }
 
     @JsonProperty
-    public void setTemplate(String template) {
-        this.template = template;
-    }
-
-    @JsonProperty
-    public String getDefaultName() {
-        return defaultName;
-    }
-
-    @JsonProperty
-    public void setDefaultName(String name) {
-        this.defaultName = name;
+    public void setConfigExtra(String configExtra) {
+        this.configExtra = configExtra;
     }
 }
